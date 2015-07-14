@@ -3,22 +3,29 @@
 """
 #------------------------------------------------------------------------------
 import web
+import config
 
 #------------------------------------------------------------------------------
 URLS = (
     '/', 'Main'
 )
 
+WEB_ENV = {'version': config.VERSION}
+TMPLS = web.template.render('templates', globals=WEB_ENV)
+
+web.config.debug = config.WEB_DEBUG
+
 
 #------------------------------------------------------------------------------
 class Main(object):
-    """Class to Handle root urls"""
+    """Class to Handle root urls."""
     def GET(self):
-        return 'Hello, World!'
+        return TMPLS.main()
 
 
 #------------------------------------------------------------------------------
 def main():
+    """ Main function."""
     app = web.application(URLS, globals())
     app.run()
 
