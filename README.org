@@ -1,0 +1,22 @@
+#+STARTUP: showall
+
+raspcam is a web service to control a Raspberry Pi Camera.
+
+* Fast Install
+
+  *PREREQUISITES*: You need to have installed Python with modules /webpy/, and 
+  /pycamera/.
+
+  Copy the file /config.py.example/ to /config.py/. This file should be edited
+  to setup the web server.
+
+  #+begin_src bash
+  cp config.py.example config.py
+  #+end_src
+
+* Acknowledgments
+  - Bootstrap 3.3.5 [[http://twitter.github.io/bootstrap/]]
+  - JQuery 2.1.4 [[http://jquery.com/]]
+  - Web.py http://webpy.org/
+  - Raspberry Pi https://www.raspberrypi.org/
+
