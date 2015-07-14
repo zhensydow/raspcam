@@ -7,7 +7,8 @@ import config
 
 #------------------------------------------------------------------------------
 URLS = (
-    '/', 'Main'
+    '/', 'Main',
+    '/lastimage.jpg', 'LastImage',
 )
 
 WEB_ENV = {'version': config.VERSION}
@@ -21,6 +22,13 @@ class Main(object):
     """Class to Handle root urls."""
     def GET(self):
         return TMPLS.main()
+
+
+#------------------------------------------------------------------------------
+class LastImage(object):
+    def GET(self):
+        web.header("Content-Type", "images/jpeg")
+        return open("lastimage.jpg","rb").read()
 
 
 #------------------------------------------------------------------------------
