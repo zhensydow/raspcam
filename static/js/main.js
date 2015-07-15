@@ -3,9 +3,10 @@ $( document ).ready(function() {
         $.ajax({
             type: "PUT",
             dataType: "json",
+            data: {vflip: true},
             url: '/ajax/camera',
             success: function( data ) {
-                alert( "vflip ok" + data );
+                console.log( "vflip ok" );
             }
         });
     });
@@ -14,9 +15,10 @@ $( document ).ready(function() {
         $.ajax({
             type: "PUT",
             dataType: "json",
+            data: {hflip: true},
             url: '/ajax/camera',
             success: function( data ) {
-                alert( "hflip ok" + data );
+                console.log( "hflip ok" );
             }
         });
     });

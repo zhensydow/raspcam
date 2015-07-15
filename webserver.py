@@ -36,6 +36,8 @@ class LastImage(object):
 #------------------------------------------------------------------------------
 class AjaxCamera(object):
     def PUT(self):
+        x = web.input()
+        print x
         return json.dumps({'ok':True})
 
 
