@@ -4,11 +4,13 @@
 #------------------------------------------------------------------------------
 import web
 import config
+import json
 
 #------------------------------------------------------------------------------
 URLS = (
     '/', 'Main',
     '/lastimage.jpg', 'LastImage',
+    '/ajax/camera', 'AjaxCamera',
 )
 
 WEB_ENV = {'version': config.VERSION, 'camera_name': config.CAMERA_NAME}
@@ -29,6 +31,12 @@ class LastImage(object):
     def GET(self):
         web.header("Content-Type", "images/jpeg")
         return open("lastimage.jpg","rb").read()
+
+
+#------------------------------------------------------------------------------
+class AjaxCamera(object):
+    def PUT(self):
+        return json.dumps({'ok':True})
 
 
 #------------------------------------------------------------------------------

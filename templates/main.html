@@ -17,12 +17,25 @@
     <div class="container-fluid">
       <h1>$camera_name</h1>
 
-      <img src="lastimage.jpg" alt="last image"/>
+      <div class="row">
+        <div class="col-md-6">
+          <img class="img-responsive img-rounded" src="lastimage.jpg" alt="last image"/>
+        </div>
+        <div class="col-md-6">
+          <button id="b_vflip" class="btn btn-default" type="submit">
+            Vertical Flip
+          </button>
+          <button id="b_hflip" class="btn btn-default" type="submit">
+            Horizontal Flip
+          </button>
+        </div>
+      </div><!-- row -->
 
     </div><!-- container -->
 
     <script src="static/js/jquery.min.js"></script>
     <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/main.js"></script>
 
   </body>
 </html>
