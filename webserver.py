@@ -11,7 +11,7 @@ URLS = (
     '/lastimage.jpg', 'LastImage',
 )
 
-WEB_ENV = {'version': config.VERSION}
+WEB_ENV = {'version': config.VERSION, 'camera_name': config.CAMERA_NAME}
 TMPLS = web.template.render('templates', globals=WEB_ENV)
 
 web.config.debug = config.WEB_DEBUG
