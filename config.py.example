@@ -11,5 +11,6 @@ WEB_DEBUG = True
 ### Camera Configurations ###
 
 CAMERA_NAME = "Raspberry Cam"
+CAMERA_SLEEP = 5
 
 ######################################################################

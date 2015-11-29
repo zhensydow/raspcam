@@ -15,6 +15,10 @@ except ImportError:
     found_picamera = False
 
 #------------------------------------------------------------------------------
+DEFAULT_BRIGHTNESS = 50
+DEFAULT_CONTRAST = 0
+
+#------------------------------------------------------------------------------
 URLS = (
     '/', 'Main',
     '/lastimage.jpg', 'LastImage',
@@ -26,6 +30,7 @@ TMPLS = web.template.render('templates', globals=WEB_ENV)
 
 web.config.debug = config.WEB_DEBUG
 
+camera_sleep = config.CAMERA_SLEEP
 
 #------------------------------------------------------------------------------
 def getInt(string_value, default_value=0):
@@ -94,11 +99,15 @@ def camera_loop(camera_config):
 
     while 1 == 1:
         if camera:
+            camera.brightness = camera_config.get('brightness', DEFAULT_BRIGHTNESS)
+            camera.contrast = camera_config.get('contrast', DEFAULT_CONTRAST)
+            camera.hvlifp = camera_config.get('hflip', False)
+            camera.vflip = camera_config.get('vflip', False)
             camera.capture('lastimage.jpg')
         else:
             print "camera: ", camera_config
 
-        time.sleep(5)
+        time.sleep(camera_sleep)
 
 
 #------------------------------------------------------------------------------
@@ -113,8 +122,8 @@ def main():
     manager = multiprocessing.Manager()
 
     camera_config = manager.dict()
-    camera_config['brightness'] = 50
-    camera_config['contrast'] = 0
+    camera_config['brightness'] = DEFAULT_BRIGHTNESS
+    camera_config['contrast'] = DEFAULT_CONTRAST
     camera_config['hflip'] = False
     camera_config['vflip'] = False
 
