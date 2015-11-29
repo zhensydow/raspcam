@@ -10,6 +10,25 @@ function configCamera( newconfig ){
     });
 }
 
+function refreshServerValues(){
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: '/ajax/camera',
+        success: function( data ) {
+            if( data.ok ){
+                var brightness = data.params.brightness;
+                $( "#txt_brightness" ).html(brightness);
+                $( "#sld_brightness" ).slider("value", brightness);
+
+                var contrast = data.params.contrast;
+                $( "#txt_contrast" ).html(contrast);
+                $( "#sld_contrast" ).slider("value", contrast);
+            }
+        }
+    });
+}
+
 $( document ).ready(function(){
     $( "#sld_brightness" ).slider({
         value: 50,
@@ -21,7 +40,9 @@ $( document ).ready(function(){
 
     $( "#sld_brightness" ).on( "slidechange", function( event, ui ){
         $( "#txt_brightness" ).html(ui.value);
-        configCamera({brightness: ui.value});
+        if( event.originalEvent ){
+            configCamera({brightness: ui.value});
+        }
     });
 
     $( "#sld_contrast" ).slider({
@@ -34,7 +55,9 @@ $( document ).ready(function(){
 
     $( "#sld_contrast" ).on( "slidechange", function( event, ui ){
         $( "#txt_contrast" ).html(ui.value);
-        configCamera({contrast: ui.value});
+        if( event.originalEvent ){
+            configCamera({contrast: ui.value});
+        }
     });
 
     $( "#b_vflip" ).click(function(){
@@ -49,4 +72,5 @@ $( document ).ready(function(){
         $("#cam_img").attr("src", "/lastimage.jpg?"+new Date().getTime());
     }, 5000);
 
+    refreshServerValues()
 });

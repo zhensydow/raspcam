@@ -16,8 +16,8 @@ except ImportError:
     found_picamera = False
 
 #------------------------------------------------------------------------------
-DEFAULT_BRIGHTNESS = 50
-DEFAULT_CONTRAST = 0
+DEF_BRIGHTNESS = 50
+DEF_CONTRAST = 0
 
 #------------------------------------------------------------------------------
 URLS = (
@@ -32,6 +32,7 @@ TMPLS = web.template.render('templates', globals=WEB_ENV)
 web.config.debug = config.WEB_DEBUG
 
 camera_sleep = config.CAMERA_SLEEP
+
 
 #------------------------------------------------------------------------------
 def getInt(string_value, default_value=0):
@@ -67,9 +68,19 @@ class LastImage(object):
 class AjaxCamera(object):
     """Class to handle camera ajax queries."""
 
+    def GET(self):
+        """http GET response method."""
+
+        web.header('Content-Type', 'application/json')
+        cam_config = web.camera_config
+        params = {}
+        params.update(cam_config)
+        return json.dumps({'ok': True, 'params': params})
+
     def PUT(self):
         """http PUT response method."""
 
+        web.header('Content-Type', 'application/json')
         params = web.input()
         cam_config = web.camera_config
 
@@ -100,8 +111,8 @@ def camera_loop(camera_config):
 
     while 1 == 1:
         if camera:
-            camera.brightness = camera_config.get('brightness', DEFAULT_BRIGHTNESS)
-            camera.contrast = camera_config.get('contrast', DEFAULT_CONTRAST)
+            camera.brightness = camera_config.get('brightness', DEF_BRIGHTNESS)
+            camera.contrast = camera_config.get('contrast', DEF_CONTRAST)
             camera.hflip = camera_config.get('hflip', False)
             camera.vflip = camera_config.get('vflip', False)
             camera.capture('lastimage0.jpg')
@@ -124,8 +135,8 @@ def main():
     manager = multiprocessing.Manager()
 
     camera_config = manager.dict()
-    camera_config['brightness'] = DEFAULT_BRIGHTNESS
-    camera_config['contrast'] = DEFAULT_CONTRAST
+    camera_config['brightness'] = DEF_BRIGHTNESS
+    camera_config['contrast'] = DEF_CONTRAST
     camera_config['hflip'] = False
     camera_config['vflip'] = False
 
