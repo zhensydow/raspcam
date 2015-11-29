@@ -7,6 +7,14 @@ import config
 import json
 import multiprocessing
 import time
+import imp
+
+try:
+    imp.find_module('eggs')
+    found_picamera = True
+    import pycamera
+except ImportError:
+    found_picamera = False
 
 #------------------------------------------------------------------------------
 URLS = (
@@ -95,6 +103,11 @@ def camera_loop(camera_config):
 #------------------------------------------------------------------------------
 def main():
     """Main function."""
+
+    if found_picamera:
+        print "picamera founded"
+    else:
+        print "picamera not founded"
 
     manager = multiprocessing.Manager()
 
