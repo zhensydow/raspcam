@@ -22,4 +22,9 @@ $( document ).ready(function() {
             }
         });
     });
+
+    setInterval(function(){
+        $("#cam_img").attr("src", "/lastimage.jpg?"+new Date().getTime());
+    }, 5000);
+
 });
