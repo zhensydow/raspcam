@@ -1,26 +1,44 @@
-$( document ).ready(function() {
+function configCamera( newconfig ){
+    $.ajax({
+        type: "PUT",
+        dataType: "json",
+        data: newconfig,
+        url: '/ajax/camera',
+        success: function( data ) {
+            console.log( "camera config OK" );
+        }
+    });
+}
+
+$( document ).ready(function(){
+    $( "#sld_brightness" ).slider({
+        value: 50,
+        min: 0,
+        max: 100
+    });
+
+    $( "#sld_brightness" ).on( "slidechange", function( event, ui ){
+        $( "#txt_brightness" ).html(ui.value);
+        configCamera({brightness: ui.value});
+    });
+
+    $( "#sld_contrast" ).slider({
+        value: 0,
+        min: -100,
+        max: 100
+    });
+
+    $( "#sld_contrast" ).on( "slidechange", function( event, ui ){
+        $( "#txt_contrast" ).html(ui.value);
+        configCamera({contrast: ui.value});
+    });
+
     $( "#b_vflip" ).click(function(){
-        $.ajax({
-            type: "PUT",
-            dataType: "json",
-            data: {vflip: true},
-            url: '/ajax/camera',
-            success: function( data ) {
-                console.log( "vflip ok" );
-            }
-        });
+        configCamera({vflip: true});
     });
 
     $( "#b_hflip" ).click(function(){
-        $.ajax({
-            type: "PUT",
-            dataType: "json",
-            data: {hflip: true},
-            url: '/ajax/camera',
-            success: function( data ) {
-                console.log( "hflip ok" );
-            }
-        });
+        configCamera({hflip: true});
     });
 
     setInterval(function(){

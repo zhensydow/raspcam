@@ -22,6 +22,15 @@ web.config.debug = config.WEB_DEBUG
 
 
 #------------------------------------------------------------------------------
+def getInt(string_value, default_value=0):
+    try:
+        int_value = int(string_value)
+        return int_value
+    except ValueError:
+        return default_value
+
+
+#------------------------------------------------------------------------------
 class Main(object):
     """Class to Handle root urls."""
 
@@ -51,6 +60,14 @@ class AjaxCamera(object):
 
         params = web.input()
         cam_config = web.camera_config
+
+        if 'brightness' in params:
+            old_val = cam_config['brightness']
+            cam_config['brightness'] = getInt(params['brightness'], old_val)
+
+        if 'contrast' in params:
+            old_val = cam_config['contrast']
+            cam_config['contrast'] = getInt(params['contrast'], old_val)
 
         if 'hflip' in params and params.hflip:
             cam_config['hflip'] = not cam_config.get('hflip', False)
@@ -82,6 +99,8 @@ def main():
     manager = multiprocessing.Manager()
 
     camera_config = manager.dict()
+    camera_config['brightness'] = 50
+    camera_config['contrast'] = 0
     camera_config['hflip'] = False
     camera_config['vflip'] = False
 
