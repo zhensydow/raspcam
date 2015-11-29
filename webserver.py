@@ -90,14 +90,17 @@ class AjaxCamera(object):
 def camera_loop(camera_config):
     """Camera update loop."""
 
-    print "start loop"
-    try:
-        while 1 == 1:
-            time.sleep(5)
-            print "camera ", camera_config
+    camera = None
+    if found_picamera:
+        camera = picamera.PiCamera()
 
-    except KeyboardInterrupt:
-        print "Ending loop"
+    while 1 == 1:
+        if camera:
+            camera.capture('lastimage.jpg')
+        else:
+            print "camera: ", camera_config
+
+        time.sleep(5)
 
 
 #------------------------------------------------------------------------------
@@ -123,9 +126,7 @@ def main():
 
     loop = multiprocessing.Process(target=camera_loop, args=(camera_config,))
     loop.start()
-
     app.run()
-
     loop.terminate()
 
 
