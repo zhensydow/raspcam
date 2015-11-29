@@ -7,6 +7,7 @@ import config
 import json
 import multiprocessing
 import time
+import shutil
 
 try:
     import picamera
@@ -103,7 +104,8 @@ def camera_loop(camera_config):
             camera.contrast = camera_config.get('contrast', DEFAULT_CONTRAST)
             camera.hflip = camera_config.get('hflip', False)
             camera.vflip = camera_config.get('vflip', False)
-            camera.capture('lastimage.jpg')
+            camera.capture('lastimage0.jpg')
+            shutil.copy('lastimage0.jpg', 'lastimage.jpg')
         else:
             print "camera: ", camera_config
 
