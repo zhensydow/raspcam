@@ -7,12 +7,10 @@ import config
 import json
 import multiprocessing
 import time
-import imp
 
 try:
-    imp.find_module('eggs')
+    import picamera
     found_picamera = True
-    import pycamera
 except ImportError:
     found_picamera = False
 
