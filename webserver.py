@@ -101,7 +101,7 @@ def camera_loop(camera_config):
         if camera:
             camera.brightness = camera_config.get('brightness', DEFAULT_BRIGHTNESS)
             camera.contrast = camera_config.get('contrast', DEFAULT_CONTRAST)
-            camera.hvlifp = camera_config.get('hflip', False)
+            camera.hflip = camera_config.get('hflip', False)
             camera.vflip = camera_config.get('vflip', False)
             camera.capture('lastimage.jpg')
         else:
