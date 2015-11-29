@@ -14,7 +14,9 @@ $( document ).ready(function(){
     $( "#sld_brightness" ).slider({
         value: 50,
         min: 0,
-        max: 100
+        max: 100,
+        animate: true,
+        range: "min"
     });
 
     $( "#sld_brightness" ).on( "slidechange", function( event, ui ){
@@ -25,7 +27,9 @@ $( document ).ready(function(){
     $( "#sld_contrast" ).slider({
         value: 0,
         min: -100,
-        max: 100
+        max: 100,
+        animate: true,
+        range: "min"
     });
 
     $( "#sld_contrast" ).on( "slidechange", function( event, ui ){
