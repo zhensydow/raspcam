@@ -40,6 +40,7 @@ camera_sleep = config.CAMERA_SLEEP
 face_cascade = cv2.CascadeClassifier('hc_ff.xml')
 eye_cascade = cv2.CascadeClassifier('hc_eye.xml')
 
+
 #------------------------------------------------------------------------------
 def getInt(string_value, default_value=0):
     try:
@@ -121,7 +122,7 @@ class AjaxCamera(object):
 #------------------------------------------------------------------------------
 class AjaxFilter(object):
     """Class to handle camera ajax filter queries."""
-    
+
     def POST(self):
         """http POST response method."""
         web.header('Content-Type', 'application/json')
@@ -131,7 +132,7 @@ class AjaxFilter(object):
         if 'filter_function' in params:
             if params['filter_function'] == 'edges':
                 img = cv2.imread('lastimage.jpg')
-                edges = cv2.Canny(img, 100, 100 )
+                edges = cv2.Canny(img, 100, 100)
                 cv2.imwrite('filterimage.jpg', edges)
 
             elif params['filter_function'] == 'laplacian':
@@ -143,13 +144,14 @@ class AjaxFilter(object):
                 img = cv2.imread('lastimage.jpg')
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 faces = face_cascade.detectMultiScale(gray, 1.3, 5)
-                for (x,y,w,h) in faces:
-                    cv2.rectangle(img, (x,y), (x+w,y+h), (255,0,0), 2)
+                for (x, y, w, h) in faces:
+                    cv2.rectangle(img, (x, y), (x+w, y+h), (255, 0, 0), 2)
                     roi_gray = gray[y:y+h, x:x+w]
                     roi_color = img[y:y+h, x:x+w]
                     eyes = eye_cascade.detectMultiScale(roi_gray)
-                    for (ex,ey,ew,eh) in eyes:
-                        cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+                    for (ex, ey, ew, eh) in eyes:
+                        cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh),
+                                      (0, 255, 0), 2)
 
                 cv2.imwrite('filterimage.jpg', img)
 
@@ -188,10 +190,10 @@ def main():
         print "picamera not founded"
 
     if not os.path.isfile("lastimage.jpg"):
-        shutil.copy("empty.jpg", "lastimage.jpg");
+        shutil.copy("empty.jpg", "lastimage.jpg")
 
     if not os.path.isfile("filterimage.jpg"):
-        shutil.copy("empty.jpg", "filterimage.jpg");
+        shutil.copy("empty.jpg", "filterimage.jpg")
 
     manager = multiprocessing.Manager()
 
