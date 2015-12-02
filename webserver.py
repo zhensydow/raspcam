@@ -9,6 +9,7 @@ import multiprocessing
 import time
 import shutil
 import os.path
+import cv2
 
 try:
     import picamera
@@ -24,7 +25,9 @@ DEF_CONTRAST = 0
 URLS = (
     '/', 'Main',
     '/lastimage.jpg', 'LastImage',
+    '/filterimage.jpg', 'FilterImage',
     '/ajax/camera', 'AjaxCamera',
+    '/ajax/filter', 'AjaxFilter',
 )
 
 WEB_ENV = {'version': config.VERSION, 'camera_name': config.CAMERA_NAME}
@@ -34,6 +37,8 @@ web.config.debug = config.WEB_DEBUG
 
 camera_sleep = config.CAMERA_SLEEP
 
+face_cascade = cv2.CascadeClassifier('hc_ff.xml')
+eye_cascade = cv2.CascadeClassifier('hc_eye.xml')
 
 #------------------------------------------------------------------------------
 def getInt(string_value, default_value=0):
@@ -63,6 +68,17 @@ class LastImage(object):
 
         web.header("Content-Type", "images/jpeg")
         return open("lastimage.jpg", "rb").read()
+
+
+#------------------------------------------------------------------------------
+class FilterImage(object):
+    """Class to handle image queries."""
+
+    def GET(self):
+        """http GET response method."""
+
+        web.header("Content-Type", "images/jpeg")
+        return open("filterimage.jpg", "rb").read()
 
 
 #------------------------------------------------------------------------------
@@ -98,6 +114,44 @@ class AjaxCamera(object):
 
         if 'vflip' in params and params.vflip:
             cam_config['vflip'] = not cam_config.get('vflip', False)
+
+        return json.dumps({'ok': True})
+
+
+#------------------------------------------------------------------------------
+class AjaxFilter(object):
+    """Class to handle camera ajax filter queries."""
+    
+    def POST(self):
+        """http POST response method."""
+        web.header('Content-Type', 'application/json')
+        params = web.input()
+        print params
+
+        if 'filter_function' in params:
+            if params['filter_function'] == 'edges':
+                img = cv2.imread('lastimage.jpg')
+                edges = cv2.Canny(img, 100, 100 )
+                cv2.imwrite('filterimage.jpg', edges)
+
+            elif params['filter_function'] == 'laplacian':
+                img = cv2.imread('lastimage.jpg')
+                laplacian = cv2.Laplacian(img, cv2.CV_64F)
+                cv2.imwrite('filterimage.jpg', laplacian)
+
+            elif params['filter_function'] == 'faces':
+                img = cv2.imread('lastimage.jpg')
+                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+                for (x,y,w,h) in faces:
+                    cv2.rectangle(img, (x,y), (x+w,y+h), (255,0,0), 2)
+                    roi_gray = gray[y:y+h, x:x+w]
+                    roi_color = img[y:y+h, x:x+w]
+                    eyes = eye_cascade.detectMultiScale(roi_gray)
+                    for (ex,ey,ew,eh) in eyes:
+                        cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
+
+                cv2.imwrite('filterimage.jpg', img)
 
         return json.dumps({'ok': True})
 

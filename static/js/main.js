@@ -10,6 +10,18 @@ function configCamera( newconfig ){
     });
 }
 
+function filterImage( fun ){
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        data: {filter_function: fun},
+        url: '/ajax/filter',
+        success: function( data ) {
+            $("#filter_img").attr("src", "/filterimage.jpg?"+new Date().getTime());
+        }
+    });
+}
+
 function refreshServerValues(){
     $.ajax({
         type: "GET",
@@ -66,6 +78,18 @@ $( document ).ready(function(){
 
     $( "#b_hflip" ).click(function(){
         configCamera({hflip: true});
+    });
+
+    $( "#b_edges" ).click(function(){
+        filterImage('edges');
+    });
+
+    $( "#b_laplacian" ).click(function(){
+        filterImage('laplacian');
+    });
+
+    $( "#b_faces" ).click(function(){
+        filterImage('faces');
     });
 
     setInterval(function(){
