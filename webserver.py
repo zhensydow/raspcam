@@ -11,6 +11,7 @@ import shutil
 import os.path
 import cv2
 
+# check if there is the raspberry camera library and import it
 try:
     import picamera
     found_picamera = True
@@ -18,6 +19,7 @@ except ImportError:
     found_picamera = False
 
 #------------------------------------------------------------------------------
+# default configurations for the camera
 DEF_BRIGHTNESS = 50
 DEF_CONTRAST = 0
 
@@ -37,12 +39,14 @@ web.config.debug = config.WEB_DEBUG
 
 camera_sleep = config.CAMERA_SLEEP
 
+# data configurations for face detection
 face_cascade = cv2.CascadeClassifier('hc_ff.xml')
 eye_cascade = cv2.CascadeClassifier('hc_eye.xml')
 
 
 #------------------------------------------------------------------------------
 def getInt(string_value, default_value=0):
+    """Get an integer value from a string or return a default."""
     try:
         int_value = int(string_value)
         return int_value
@@ -90,6 +94,7 @@ class AjaxCamera(object):
         """http GET response method."""
 
         web.header('Content-Type', 'application/json')
+        # extra camera config parameter to a dictionary
         cam_config = web.camera_config
         params = {}
         params.update(cam_config)
@@ -102,6 +107,7 @@ class AjaxCamera(object):
         params = web.input()
         cam_config = web.camera_config
 
+        # update camera config with new values
         if 'brightness' in params:
             old_val = cam_config['brightness']
             cam_config['brightness'] = getInt(params['brightness'], old_val)
@@ -125,9 +131,9 @@ class AjaxFilter(object):
 
     def POST(self):
         """http POST response method."""
+
         web.header('Content-Type', 'application/json')
         params = web.input()
-        print params
 
         if 'filter_function' in params:
             if params['filter_function'] == 'edges':
@@ -152,7 +158,6 @@ class AjaxFilter(object):
                     for (ex, ey, ew, eh) in eyes:
                         cv2.rectangle(roi_color, (ex, ey), (ex+ew, ey+eh),
                                       (0, 255, 0), 2)
-
                 cv2.imwrite('filterimage.jpg', img)
 
         return json.dumps({'ok': True})
@@ -197,6 +202,7 @@ def main():
 
     manager = multiprocessing.Manager()
 
+    # set the default camera config
     camera_config = manager.dict()
     camera_config['brightness'] = DEF_BRIGHTNESS
     camera_config['contrast'] = DEF_CONTRAST
