@@ -8,6 +8,7 @@ import json
 import multiprocessing
 import time
 import shutil
+import os.path
 
 try:
     import picamera
@@ -131,6 +132,12 @@ def main():
         print "picamera founded"
     else:
         print "picamera not founded"
+
+    if not os.path.isfile("lastimage.jpg"):
+        shutil.copy("empty.jpg", "lastimage.jpg");
+
+    if not os.path.isfile("filterimage.jpg"):
+        shutil.copy("empty.jpg", "filterimage.jpg");
 
     manager = multiprocessing.Manager()
 
